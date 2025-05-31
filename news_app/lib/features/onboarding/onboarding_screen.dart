@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:news_app/core/constants/preference_keys.dart';
 import 'package:news_app/features/auth/sign_in_screen.dart';
+import 'package:news_app/models/onboarding_model.dart';
+import 'package:news_app/services/preferences_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -13,26 +16,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final PageController _controller = PageController();
   int _currentPage = 0;
 
-  /// TODO : Task - Create Model For This List
-  final List<Map<String, String>> onboardingData = [
-    {
-      'image': 'assets/images/onboarding1.png',
-      'title': 'Update for new features',
-      'desc':
-          "You deserve the best experience possible. That's why we've added new features and services to our app. Update now and see for yourself.",
-    },
-    {
-      'image': 'assets/images/onboarding2.png',
-      'title': 'Update for new features',
-      'desc':
-          "You deserve the best experience possible. That's why we've added new features and services to our app. Update now and see for yourself.",
-    },
-    {
-      'image': 'assets/images/onboarding3.png',
-      'title': 'Update for new features',
-      'desc':
-          "You deserve the best experience possible. That's why we've added new features and services to our app. Update now and see for yourself.",
-    },
+  final List<OnboardingModel> onboardingData = [
+    OnboardingModel(image: 'assets/images/onboarding1.png', title: 'Update for new features', desc: "You deserve the best experience possible. That's why we've added new features and services to our app. Update now and see for yourself."),
+    OnboardingModel(image: 'assets/images/onboarding2.png', title: 'Update for new features', desc: "You deserve the best experience possible. That's why we've added new features and services to our app. Update now and see for yourself."),
+    OnboardingModel(image: 'assets/images/onboarding1.png', title: 'Update for new features', desc: "You deserve the best experience possible. That's why we've added new features and services to our app. Update now and see for yourself."),
+    OnboardingModel(image: 'assets/images/onboarding3.png', title: 'Update for new features', desc: "You deserve the best experience possible. That's why we've added new features and services to our app. Update now and see for yourself."),
   ];
 
   void _onNext() {
@@ -47,9 +35,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   Future<void> _finishOnboarding() async {
-    /// TODO : Task - Use Preference Manager And don't use hard coded values like [onboarding_complete]
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('onboarding_complete', true);
+    final preferencesManager = PreferencesManager();
+    await preferencesManager.init();
+
+    preferencesManager.setBool(PreferenceKeys.onboardingComplete, true);
+
     if (!mounted) return;
     Navigator.push(
       context,
@@ -64,11 +54,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      /// TODO : Task - Use from theme data
-      backgroundColor: const Color(0xFFFAFAFA),
       appBar: AppBar(
-        /// TODO : Task - Add This values on theme data
-        backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [
           if (_currentPage < onboardingData.length - 1)
@@ -96,34 +82,24 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   children: [
                     const SizedBox(height: 16),
 
-                    /// TODO : Task - Use This From Model
-                    Image.asset(data['image']!, height: 320, fit: BoxFit.contain),
+                    Image.asset(data.image, height: 320, fit: BoxFit.contain),
                     const SizedBox(height: 32),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: Text(
-                        /// TODO : Task - Use This From Model
-                        data['title']!,
+                        data.title,
                         textAlign: TextAlign.center,
 
-                        /// TODO : Task - Add This To Theme Data
-                        style: const TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF484A5A),
-                        ),
+                        style:Theme.of(context).textTheme.titleLarge,
                       ),
                     ),
                     const SizedBox(height: 16),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 24.0),
                       child: Text(
-                        /// TODO : Task - Use This From Model
-                        data['desc']!,
+                        data.desc,
                         textAlign: TextAlign.center,
-
-                        /// TODO : Task - Add This To Theme Data
-                        style: const TextStyle(fontSize: 18, color: Color(0xFF8A8CA2)),
+                        style: Theme.of(context).textTheme.bodyLarge,
                       ),
                     ),
                   ],
@@ -155,11 +131,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               width: double.infinity,
               height: 56,
               child: ElevatedButton(
-                /// TODO : Task - Add This To Theme Data
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFC53030),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-                ),
                 onPressed: _onNext,
                 child: Text(
                   _currentPage == onboardingData.length - 1 ? 'Get Started' : 'Next',

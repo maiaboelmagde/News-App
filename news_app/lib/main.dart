@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:news_app/core/constants/routes.dart';
 import 'package:news_app/core/service_locator.dart';
 import 'package:news_app/core/theme/light.dart';
 import 'package:news_app/features/home/models/news_article_model.dart';
@@ -36,9 +37,9 @@ class NewsApp extends StatelessWidget {
       home: const SplashScreenWrapper(),
       debugShowCheckedModeBanner: false,
       routes: {
-        '/main': (_) => const MainScreen(),
-        '/onboarding': (_) => const OnboardingScreen(),
-        '/signin': (_) => const SignInScreen(),
+        AppRoutes.main: (_) => const MainScreen(),
+        AppRoutes.onboarding: (_) => const OnboardingScreen(),
+        AppRoutes.signIn: (_) => const SignInScreen(),
       },
     );
   }
