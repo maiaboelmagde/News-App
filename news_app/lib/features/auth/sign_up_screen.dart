@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:news_app/core/constants/preference_keys.dart';
+import 'package:news_app/core/constants/routes.dart';
 import 'package:news_app/core/widgets/custom_text_form_field.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:news_app/services/preferences_manager.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -24,7 +26,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       _errorMessage = null;
       _loading = true;
     });
-    final prefs = await SharedPreferences.getInstance();
+    final prefs = PreferencesManager();
     
     final email = _emailController.text.trim();
     final password = _passwordController.text;
@@ -61,7 +63,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       return;
     }
     // Check if user already exists
-    final savedEmail = prefs.getString('user_email');
+    final savedEmail = prefs.getString(PreferenceKeys.userEmail);
     if (savedEmail != null && savedEmail == email) {
       setState(() {
         _errorMessage = 'An account with this email already exists.';
@@ -69,11 +71,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
       });
       return;
     }
-    await prefs.setString('user_email', email);
-    await prefs.setString('user_password', password);
-    await prefs.setBool('is_logged_in', true);
+    await prefs.setString(PreferenceKeys.userEmail, email);
+    await prefs.setString(PreferenceKeys.userPassword, password);
+    await prefs.setBool(PreferenceKeys.isLoggedIn, true);
     if (!mounted) return;
-    Navigator.of(context).pushReplacementNamed('/main');
+    Navigator.of(context).pushReplacementNamed(AppRoutes.main);
   }
 
   @override

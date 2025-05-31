@@ -3,7 +3,6 @@ import 'package:news_app/core/constants/preference_keys.dart';
 import 'package:news_app/features/auth/sign_in_screen.dart';
 import 'package:news_app/models/onboarding_model.dart';
 import 'package:news_app/services/preferences_manager.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});

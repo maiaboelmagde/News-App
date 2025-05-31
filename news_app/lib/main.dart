@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:news_app/core/constants/preference_keys.dart';
 import 'package:news_app/core/constants/routes.dart';
 import 'package:news_app/core/service_locator.dart';
 import 'package:news_app/core/theme/light.dart';
@@ -10,7 +11,7 @@ import 'package:news_app/features/splash/splash_screen.dart';
 import 'package:news_app/features/main/main_screen.dart';
 import 'package:news_app/features/onboarding/onboarding_screen.dart';
 import 'package:news_app/features/auth/sign_in_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:news_app/services/preferences_manager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -61,16 +62,16 @@ class _SplashScreenWrapperState extends State<SplashScreenWrapper> {
 
   Future<void> _navigateAfterSplash() async {
     await Future.delayed(const Duration(seconds: 2));
-    final prefs = await SharedPreferences.getInstance();
-    final onboardingComplete = prefs.getBool('onboarding_complete') ?? false;
-    final isLoggedIn = prefs.getBool('is_logged_in') ?? false;
+    final prefs = PreferencesManager();
+    final onboardingComplete = prefs.getBool(PreferenceKeys.onboardingComplete) ?? false;
+    final isLoggedIn = prefs.getBool(PreferenceKeys.isLoggedIn) ?? false;
     if (!mounted) return;
     if (!onboardingComplete) {
-      Navigator.of(context).pushReplacementNamed('/onboarding');
+      Navigator.of(context).pushReplacementNamed(AppRoutes.onboarding);
     } else if (!isLoggedIn) {
-      Navigator.of(context).pushReplacementNamed('/signin');
+      Navigator.of(context).pushReplacementNamed(AppRoutes.signIn);
     } else {
-      Navigator.of(context).pushReplacementNamed('/main');
+      Navigator.of(context).pushReplacementNamed(AppRoutes.main);
     }
   }
 
