@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:news_app/core/constants/hive_boxes_names.dart';
 import 'package:news_app/features/home/models/news_article_model.dart';
 
 /// TODO : Task - Make it Shared Component and use it with search screen
@@ -79,7 +80,7 @@ class NewsCard extends StatelessWidget {
                             if (onBookmarkPressed != null) {
                               onBookmarkPressed!();
                             } else {
-                              final box = Hive.box('bookmarks');
+                              final box = Hive.box(HiveBoxesNames.bookmarks);
                               if (isBookmarked) {
                                 box.delete(article.url);
                               } else {

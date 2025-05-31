@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:news_app/core/constants/hive_boxes_names.dart';
 import 'package:news_app/core/extensions/string_extension.dart';
 import 'package:news_app/core/service_locator.dart';
 import 'package:news_app/features/home/models/news_article_model.dart';
@@ -119,7 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
               )
               : SliverToBoxAdapter(
                 child: ValueListenableBuilder(
-                  valueListenable: Hive.box('bookmarks').listenable(),
+                  valueListenable: Hive.box(HiveBoxesNames.bookmarks).listenable(),
                   builder: (context, Box box, _) {
                     return ListView.builder(
                       shrinkWrap: true,

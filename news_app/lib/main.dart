@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:news_app/core/constants/hive_boxes_names.dart';
 import 'package:news_app/core/constants/preference_keys.dart';
 import 'package:news_app/core/constants/routes.dart';
 import 'package:news_app/core/service_locator.dart';
@@ -20,8 +21,8 @@ void main() async {
 
   Hive.registerAdapter(NewsArticleAdapter());
 
-  await Hive.openBox('bookmarks');
-  await Hive.openBox('settings');
+  await Hive.openBox(HiveBoxesNames.bookmarks);
+  await Hive.openBox(HiveBoxesNames.settings);
 
   setupLocator();
 
@@ -63,6 +64,7 @@ class _SplashScreenWrapperState extends State<SplashScreenWrapper> {
   Future<void> _navigateAfterSplash() async {
     await Future.delayed(const Duration(seconds: 2));
     final prefs = PreferencesManager();
+    await prefs.init();
     final onboardingComplete = prefs.getBool(PreferenceKeys.onboardingComplete) ?? false;
     final isLoggedIn = prefs.getBool(PreferenceKeys.isLoggedIn) ?? false;
     if (!mounted) return;

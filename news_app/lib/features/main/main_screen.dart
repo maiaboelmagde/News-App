@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:news_app/core/widgets/custom_svg_picture.dart';
 import 'package:news_app/features/bookmark/bookmark_screen.dart';
 import 'package:news_app/features/home/home_screen.dart';
 import 'package:news_app/features/profile/profile_screen.dart';
@@ -31,12 +32,11 @@ class _MainScreenState extends State<MainScreen> {
           });
         },
         currentIndex: _currentScreenIndex,
-        items: const [
-          /// TODO : Task - Add Svg Picture Instead Of Icons
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
-          BottomNavigationBarItem(icon: Icon(Icons.bookmark_border), label: 'Bookmark'),
-          BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: 'Profile'),
+        items: [
+          BottomNavigationBarItem(icon :CustomSvgPicture(path: 'assets/images/icons/home.svg'), label: 'Home' ),
+          BottomNavigationBarItem(icon: CustomSvgPicture(path: 'assets/images/icons/search.svg'), label: 'Search'),
+          BottomNavigationBarItem(icon: CustomSvgPicture(path: 'assets/images/icons/bookmark.svg'), label: 'Bookmark'),
+          BottomNavigationBarItem(icon: CustomSvgPicture(path: 'assets/images/icons/profile.svg'), label: 'Profile'),
         ],
       ),
       body: _screens[_currentScreenIndex],
