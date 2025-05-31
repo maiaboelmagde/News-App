@@ -1,17 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:news_app/core/extensions/string_extension.dart';
 import 'package:news_app/features/home/widgets/news_card.dart';
 
 class BookmarkScreen extends StatelessWidget {
   const BookmarkScreen({super.key});
-
-  /// TODO : Task - Make it shared and make it extension
-  String _formatTimeAgo(DateTime time) {
-    final diff = DateTime.now().difference(time);
-    if (diff.inMinutes < 60) return '${diff.inMinutes}m ago';
-    if (diff.inHours < 24) return '${diff.inHours}h ago';
-    return '${diff.inDays}d ago';
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +28,7 @@ class BookmarkScreen extends StatelessWidget {
                 onBookmarkPressed: () {
                   box.deleteAt(index);
                 },
-                formatTimeAgo: _formatTimeAgo,
+                formatTimeAgo: (time)=>time.timeAgo,
               );
             },
           );
