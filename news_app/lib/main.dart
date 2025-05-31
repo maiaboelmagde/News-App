@@ -5,6 +5,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:news_app/core/constants/hive_boxes_names.dart';
 import 'package:news_app/core/constants/preference_keys.dart';
 import 'package:news_app/core/constants/routes.dart';
+import 'package:news_app/core/provider/news_provider.dart';
 import 'package:news_app/core/service_locator.dart';
 import 'package:news_app/core/theme/light.dart';
 import 'package:news_app/features/home/models/news_article_model.dart';
@@ -13,6 +14,7 @@ import 'package:news_app/features/main/main_screen.dart';
 import 'package:news_app/features/onboarding/onboarding_screen.dart';
 import 'package:news_app/features/auth/sign_in_screen.dart';
 import 'package:news_app/services/preferences_manager.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,15 +36,18 @@ class NewsApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: AppTheme.lightTheme,
-      home: const SplashScreenWrapper(),
-      debugShowCheckedModeBanner: false,
-      routes: {
-        AppRoutes.main: (_) => const MainScreen(),
-        AppRoutes.onboarding: (_) => const OnboardingScreen(),
-        AppRoutes.signIn: (_) => const SignInScreen(),
-      },
+    return ChangeNotifierProvider(
+      create: (context) => NewsProvider(),
+      child: MaterialApp(
+        theme: AppTheme.lightTheme,
+        home: const SplashScreenWrapper(),
+        debugShowCheckedModeBanner: false,
+        routes: {
+          AppRoutes.main: (_) => const MainScreen(),
+          AppRoutes.onboarding: (_) => const OnboardingScreen(),
+          AppRoutes.signIn: (_) => const SignInScreen(),
+        },
+      ),
     );
   }
 }
