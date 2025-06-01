@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:news_app/core/constants/hive_boxes_names.dart';
 import 'package:news_app/core/extensions/string_extension.dart';
+import 'package:news_app/core/provider/headlines_provider.dart';
 import 'package:news_app/core/provider/news_provider.dart';
-import 'package:news_app/core/service_locator.dart';
-import 'package:news_app/features/home/models/news_article_model.dart';
-import 'package:news_app/features/home/repositories/base_news_api_repository.dart';
 import 'package:news_app/features/home/widgets/category_list_widget.dart';
 import 'package:news_app/features/home/widgets/news_card.dart';
 import 'package:news_app/features/home/widgets/trending_news_widget.dart';
@@ -20,7 +18,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   
-  final BaseNewsApiRepository _repository = locator<BaseNewsApiRepository>();
+  //final BaseNewsApiRepository _repository = locator<BaseNewsApiRepository>();
   //List<NewsArticle> _topHeadlines = [];
   //List<NewsArticle> _everythingArticles = [];
   //bool _isLoadingHeadlines = true;
@@ -49,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Provider.of<NewsProvider>(context, listen: false).fetchNews(
       query: selectedCategory == 'Top News' ? 'news' : selectedCategory,
     );
-    Provider.of<NewsProvider>(context, listen: false).fetchTopHeadlines(category: selectedCategory == 'Top News' ? 'general' : selectedCategory,);
+    Provider.of<HeadlinesProvider>(context, listen: false).fetchTopHeadlines(category: selectedCategory == 'Top News' ? 'general' : selectedCategory,);
     // setState(() {
     //   _isLoadingHeadlines = true;
     //   _isLoadingEverything = true;
@@ -91,14 +89,15 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final newsProvider = Provider.of<NewsProvider>(context);
+    final headlinesProvider = Provider.of<HeadlinesProvider>(context);
 
     return Scaffold(
       body: CustomScrollView(
         slivers: [
           SliverToBoxAdapter(
             child: TrendingNews(
-              isLoading: newsProvider.isLoadingHeadlines,
-              articles: newsProvider.topHeadlines,
+              isLoading: headlinesProvider.isLoadingHeadlines,
+              articles: headlinesProvider.topHeadlines,
               formatTimeAgo: (time)=>time.timeAgo,
             ),
           ),

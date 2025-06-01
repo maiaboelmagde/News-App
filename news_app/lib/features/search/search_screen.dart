@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:news_app/core/service_locator.dart';
-import 'package:news_app/features/home/models/news_article_model.dart';
-import 'package:news_app/features/home/repositories/base_news_api_repository.dart';
+import 'package:news_app/core/provider/news_provider.dart';
+import 'package:provider/provider.dart';
 
-/// TODO : Task - Add Controller To It
+/// Done : Task - Add Controller To It
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
 
@@ -13,41 +12,46 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _searchController = TextEditingController();
-  List<NewsArticle> _articles = [];
-  bool _isLoading = false;
-  String? _errorMessage;
 
-  Future<void> _searchNews(String query) async {
-    if (query.isEmpty) {
-      setState(() {
-        _articles = [];
-        _errorMessage = null;
-      });
-      return;
-    }
+  // List<NewsArticle> _articles = [];
+  // bool _isLoading = false;
+  // String? _errorMessage;
 
-    setState(() {
-      _isLoading = true;
-      _errorMessage = null;
-    });
+   Future<void> _searchNews(String query) async {
+    Provider.of<NewsProvider>(context, listen: false).fetchNews(query: query);
 
-    try {
-      final repository = locator<BaseNewsApiRepository>();
-      final articles = await repository.fetchEverything(query: query);
-      setState(() {
-        _articles = articles;
-        _isLoading = false;
-      });
-    } catch (e) {
-      setState(() {
-        _errorMessage = 'Failed to load news: $e';
-        _isLoading = false;
-      });
-    }
+    // if (query.isEmpty) {
+    //   setState(() {
+    //     _articles = [];
+    //     _errorMessage = null;
+    //   });
+    //   return;
+    // }
+
+    // setState(() {
+    //   _isLoading = true;
+    //   _errorMessage = null;
+    // });
+
+    // try {
+    //   final repository = locator<BaseNewsApiRepository>();
+    //   final articles = await repository.fetchEverything(query: query);
+    //   setState(() {
+    //     _articles = articles;
+    //     _isLoading = false;
+    //   });
+    // } catch (e) {
+    //   setState(() {
+    //     _errorMessage = 'Failed to load news: $e';
+    //     _isLoading = false;
+    //   });
+    // }
   }
+
 
   @override
   Widget build(BuildContext context) {
+    final newsProvider=Provider.of<NewsProvider>(context);
     return Scaffold(
       appBar: AppBar(title: const Text('Search News')),
       body: Padding(
@@ -66,16 +70,16 @@ class _SearchScreenState extends State<SearchScreen> {
             const SizedBox(height: 16.0),
             Expanded(
               child:
-                  _isLoading
+                  newsProvider.isLoadingEverything
                       ? const Center(child: CircularProgressIndicator())
-                      : _errorMessage != null
-                      ? Center(child: Text(_errorMessage!))
-                      : _articles.isEmpty
+                      : newsProvider.newsErrorMessage != null
+                      ? Center(child: Text(newsProvider.newsErrorMessage!))
+                      : newsProvider.newsArticles.isEmpty
                       ? const Center(child: Text('No results found'))
                       : ListView.builder(
-                        itemCount: _articles.length,
+                        itemCount:newsProvider.newsArticles.length,
                         itemBuilder: (context, index) {
-                          final article = _articles[index];
+                          final article = newsProvider.newsArticles[index];
                           return ListTile(
                             leading:
                                 article.urlToImage != null

@@ -5,6 +5,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:news_app/core/constants/hive_boxes_names.dart';
 import 'package:news_app/core/constants/preference_keys.dart';
 import 'package:news_app/core/constants/routes.dart';
+import 'package:news_app/core/provider/headlines_provider.dart';
 import 'package:news_app/core/provider/news_provider.dart';
 import 'package:news_app/core/service_locator.dart';
 import 'package:news_app/core/theme/light.dart';
@@ -38,15 +39,18 @@ class NewsApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => NewsProvider(),
-      child: MaterialApp(
-        theme: AppTheme.lightTheme,
-        home: const SplashScreenWrapper(),
-        debugShowCheckedModeBanner: false,
-        routes: {
-          AppRoutes.main: (_) => const MainScreen(),
-          AppRoutes.onboarding: (_) => const OnboardingScreen(),
-          AppRoutes.signIn: (_) => const SignInScreen(),
-        },
+      child: ChangeNotifierProvider(
+        create: (context) => HeadlinesProvider(),
+        child: MaterialApp(
+          theme: AppTheme.lightTheme,
+          home: const SplashScreenWrapper(),
+          debugShowCheckedModeBanner: false,
+          routes: {
+            AppRoutes.main: (_) => const MainScreen(),
+            AppRoutes.onboarding: (_) => const OnboardingScreen(),
+            AppRoutes.signIn: (_) => const SignInScreen(),
+          },
+        ),
       ),
     );
   }

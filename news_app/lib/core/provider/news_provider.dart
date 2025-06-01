@@ -7,15 +7,21 @@ import 'package:news_app/features/home/repositories/base_news_api_repository.dar
 
 class NewsProvider with ChangeNotifier{
   final BaseNewsApiRepository _repository = locator<BaseNewsApiRepository>();
+
   bool _isLoadingEverything = true;
-  bool _isLoadingHeadlines = true;
   List<NewsArticle> _newsArticles = [];
-  List<NewsArticle> _topHeadlines = [];
+  String? _newsErrorMessage = null;
+  // bool _isLoadingHeadlines = true;
+  // List<NewsArticle> _topHeadlines = [];
+  // String _headlinesErrorMessage = '';
+  
 
   List<NewsArticle> get newsArticles =>_newsArticles;
-  List<NewsArticle> get topHeadlines => _topHeadlines;
+  // List<NewsArticle> get topHeadlines => _topHeadlines;
   bool get isLoadingEverything => _isLoadingEverything;
-  bool get isLoadingHeadlines => _isLoadingHeadlines;
+  // bool get isLoadingHeadlines => _isLoadingHeadlines;
+  String? get newsErrorMessage => _newsErrorMessage;
+  // String get headlinesErrorMessage => _headlinesErrorMessage;
 
 
   Future<void>fetchNews({required String query})async{
@@ -24,22 +30,22 @@ class NewsProvider with ChangeNotifier{
       _newsArticles = await _repository.fetchEverything(query: 'news');
     }catch(e){
       _newsArticles = [];
-      log('No articles returned at NewsProvider, fetchNews');
+      _newsErrorMessage='FAILED TO Fech Articles';
     }
     _isLoadingEverything = false;
     notifyListeners();
   }
 
-  Future<void>fetchTopHeadlines({required String category})async{
-    _isLoadingHeadlines = true;
-    try{
-      _topHeadlines = await _repository.fetchTopHeadlines(category: category);
-    }catch(e){
-      _topHeadlines = [];
-      log('No thing returned at NewsProvider, fetchTopHeadlines');
-    }
-    _isLoadingHeadlines = false;
-    notifyListeners();
-  }
+  // Future<void>fetchTopHeadlines({required String category})async{
+  //   _isLoadingHeadlines = true;
+  //   try{
+  //     _topHeadlines = await _repository.fetchTopHeadlines(category: category);
+  //   }catch(e){
+  //     _topHeadlines = [];
+  //     log('No thing returned at NewsProvider, fetchTopHeadlines');
+  //   }
+  //   _isLoadingHeadlines = false;
+  //   notifyListeners();
+  // }
 
 }
