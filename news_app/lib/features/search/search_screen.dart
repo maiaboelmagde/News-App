@@ -1,122 +1,125 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:news_app/core/constants/hive_boxes_names.dart';
+import 'package:news_app/core/extensions/string_extension.dart';
 import 'package:news_app/core/provider/news_provider.dart';
+import 'package:news_app/core/widgets/news_card.dart';
+import 'package:news_app/features/search/search_provider.dart';
 import 'package:provider/provider.dart';
 
 /// Done : Task - Add Controller To It
-class SearchScreen extends StatefulWidget {
-  const SearchScreen({super.key});
-
-  @override
-  State<SearchScreen> createState() => _SearchScreenState();
-}
-
-class _SearchScreenState extends State<SearchScreen> {
+class SearchScreen extends StatelessWidget {
   final TextEditingController _searchController = TextEditingController();
+
 
   // List<NewsArticle> _articles = [];
   // bool _isLoading = false;
   // String? _errorMessage;
 
-   Future<void> _searchNews(String query) async {
-    Provider.of<NewsProvider>(context, listen: false).fetchNews(query: query);
+  // Future<void> _searchNews(String query) async {
+  //   Provider.of<SearchProvider>(context, listen: false).fetchNews(query: query);
 
-    // if (query.isEmpty) {
-    //   setState(() {
-    //     _articles = [];
-    //     _errorMessage = null;
-    //   });
-    //   return;
-    // }
+  // if (query.isEmpty) {
+  //   setState(() {
+  //     _articles = [];
+  //     _errorMessage = null;
+  //   });
+  //   return;
+  // }
 
-    // setState(() {
-    //   _isLoading = true;
-    //   _errorMessage = null;
-    // });
+  // setState(() {
+  //   _isLoading = true;
+  //   _errorMessage = null;
+  // });
 
-    // try {
-    //   final repository = locator<BaseNewsApiRepository>();
-    //   final articles = await repository.fetchEverything(query: query);
-    //   setState(() {
-    //     _articles = articles;
-    //     _isLoading = false;
-    //   });
-    // } catch (e) {
-    //   setState(() {
-    //     _errorMessage = 'Failed to load news: $e';
-    //     _isLoading = false;
-    //   });
-    // }
-  }
-
+  // try {
+  //   final repository = locator<BaseNewsApiRepository>();
+  //   final articles = await repository.fetchEverything(query: query);
+  //   setState(() {
+  //     _articles = articles;
+  //     _isLoading = false;
+  //   });
+  // } catch (e) {
+  //   setState(() {
+  //     _errorMessage = 'Failed to load news: $e';
+  //     _isLoading = false;
+  //   });
+  // }
+  // }
 
   @override
   Widget build(BuildContext context) {
-    final newsProvider=Provider.of<NewsProvider>(context);
-    return Scaffold(
-      appBar: AppBar(title: const Text('Search News')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: _searchController,
-              decoration: InputDecoration(
-                hintText: 'Search for news...',
-                prefixIcon: const Icon(Icons.search),
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
-              ),
-              onSubmitted: _searchNews,
-            ),
-            const SizedBox(height: 16.0),
-            Expanded(
-              child:
-                  newsProvider.isLoadingEverything
+    return ChangeNotifierProvider(
+      create: (context) => SearchProvider(),
+      child: Builder(
+        
+        builder: (context){
+          final searchProvider = Provider.of<SearchProvider>(context);
+          return Scaffold(
+          appBar: AppBar(title: const Text('Search News')),
+          body: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                TextField(
+                  controller: _searchController,
+                  decoration: InputDecoration(
+                    hintText: 'Search for news...',
+                    prefixIcon: const Icon(Icons.search),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                  ),
+                  onSubmitted: (value) {
+                    searchProvider.fetchNews(query: value);
+                  },
+                ),
+                const SizedBox(height: 16.0),
+                Expanded(
+                  child: searchProvider.isLoadingEverything
                       ? const Center(child: CircularProgressIndicator())
-                      : newsProvider.newsErrorMessage != null
-                      ? Center(child: Text(newsProvider.newsErrorMessage!))
-                      : newsProvider.newsArticles.isEmpty
-                      ? const Center(child: Text('No results found'))
-                      : ListView.builder(
-                        itemCount:newsProvider.newsArticles.length,
-                        itemBuilder: (context, index) {
-                          final article = newsProvider.newsArticles[index];
-                          return ListTile(
-                            leading:
-                                article.urlToImage != null
-                                    ? Image.network(
-                                      article.urlToImage!,
-                                      width: 50,
-                                      height: 50,
-                                      fit: BoxFit.cover,
-                                      errorBuilder:
-                                          (context, error, stackTrace) =>
-                                              const Icon(Icons.image_not_supported),
-                                    )
-                                    : Container(
-                                      width: 50,
-                                      height: 50,
-                                      color: Colors.grey.shade400,
-                                    ),
-                            title: Text(article.title),
-                            subtitle: Text(
-                              '${article.sourceName} • ${article.publishedAt.toString()}',
-                            ),
-                            onTap: () {
-                              // TODO: Navigate to article details screen
-                            },
-                          );
-                        },
-                      ),
+                      : searchProvider.newsErrorMessage != null
+                          ? Center(child: Text(searchProvider.newsErrorMessage!))
+                          : searchProvider.articles.isEmpty
+                              ? const Center(child: Text('No results found'))
+                              : NewsListView(newsProvider: searchProvider),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        );
+        }
       ),
     );
   }
+}
+
+class NewsListView extends StatelessWidget {
+  const NewsListView({
+    super.key,
+    required this.newsProvider,
+  });
+
+  final SearchProvider newsProvider;
 
   @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder(
+      valueListenable: Hive.box(HiveBoxesNames.bookmarks).listenable(),
+      builder: (context, Box box, _) {
+        return ListView.builder(
+          itemCount: newsProvider.articles.length,
+          itemBuilder: (context, index) {
+            final article = newsProvider.articles[index];
+            final isBookmarked = box.containsKey(article.url);
+            return NewsCard(
+              article: article,
+              isBookmarked: isBookmarked,
+              formatTimeAgo: (time) => time.timeAgo,
+            );
+          },
+        );
+      },
+    );
   }
 }

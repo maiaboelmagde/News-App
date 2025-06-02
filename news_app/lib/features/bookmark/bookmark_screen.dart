@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:news_app/core/constants/hive_boxes_names.dart';
 import 'package:news_app/core/extensions/string_extension.dart';
-import 'package:news_app/features/home/widgets/news_card.dart';
+import 'package:news_app/core/widgets/news_card.dart';
 
 class BookmarkScreen extends StatelessWidget {
   const BookmarkScreen({super.key});

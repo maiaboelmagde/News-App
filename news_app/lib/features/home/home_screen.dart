@@ -4,8 +4,8 @@ import 'package:news_app/core/constants/hive_boxes_names.dart';
 import 'package:news_app/core/extensions/string_extension.dart';
 import 'package:news_app/core/provider/headlines_provider.dart';
 import 'package:news_app/core/provider/news_provider.dart';
+import 'package:news_app/core/widgets/news_card.dart';
 import 'package:news_app/features/home/widgets/category_list_widget.dart';
-import 'package:news_app/features/home/widgets/news_card.dart';
 import 'package:news_app/features/home/widgets/trending_news_widget.dart';
 import 'package:provider/provider.dart';
 

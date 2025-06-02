@@ -1,20 +1,22 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:news_app/core/service_locator.dart';
 import 'package:news_app/features/home/models/news_article_model.dart';
 import 'package:news_app/features/home/repositories/base_news_api_repository.dart';
 
-class NewsProvider with ChangeNotifier{
+class SearchProvider with ChangeNotifier{
   final BaseNewsApiRepository _repository = locator<BaseNewsApiRepository>();
 
-  bool _isLoadingEverything = true;
-  List<NewsArticle> _newsArticles = [];
+  bool _isLoadingEverything = false;
+  List<NewsArticle> _articles = [];
   String? _newsErrorMessage = null;
   // bool _isLoadingHeadlines = true;
   // List<NewsArticle> _topHeadlines = [];
   // String _headlinesErrorMessage = '';
   
 
-  List<NewsArticle> get newsArticles =>_newsArticles;
+  List<NewsArticle> get articles =>_articles;
   // List<NewsArticle> get topHeadlines => _topHeadlines;
   bool get isLoadingEverything => _isLoadingEverything;
   // bool get isLoadingHeadlines => _isLoadingHeadlines;
@@ -24,26 +26,16 @@ class NewsProvider with ChangeNotifier{
 
   Future<void>fetchNews({required String query})async{
     _isLoadingEverything = true;
+    notifyListeners ();
     try{
-      _newsArticles = await _repository.fetchEverything(query: 'news');
+      _articles = await _repository.fetchEverything(query: query);
+      log('${_articles[0].toString()}');
     }catch(e){
-      _newsArticles = [];
+      _articles = [];
       _newsErrorMessage='FAILED TO Fech Articles';
     }
     _isLoadingEverything = false;
     notifyListeners();
   }
-
-  // Future<void>fetchTopHeadlines({required String category})async{
-  //   _isLoadingHeadlines = true;
-  //   try{
-  //     _topHeadlines = await _repository.fetchTopHeadlines(category: category);
-  //   }catch(e){
-  //     _topHeadlines = [];
-  //     log('No thing returned at NewsProvider, fetchTopHeadlines');
-  //   }
-  //   _isLoadingHeadlines = false;
-  //   notifyListeners();
-  // }
 
 }

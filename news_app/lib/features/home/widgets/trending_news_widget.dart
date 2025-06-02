@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:news_app/core/theme/light.dart';
 import 'package:news_app/features/home/models/news_article_model.dart';
+import 'package:news_app/features/trends_screen/all_trends_screen.dart';
 
 class TrendingNews extends StatelessWidget {
   final bool isLoading;
@@ -60,13 +61,24 @@ class TrendingNews extends StatelessWidget {
                         style: Theme.of(context).textTheme.headlineMedium,
                       ),
 
-                      /// TODO : MAKE TRENDING NEWS SCREEN
-                      Text(
-                        'View all',
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          decoration: TextDecoration.underline,
-                          decorationColor: Colors.white,
-                          fontSize: 16,
+                      /// Done : MAKE TRENDING NEWS SCREEN
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AllTrendsScreen(),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          'View all',
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(
+                                decoration: TextDecoration.underline,
+                                decorationColor: Colors.white,
+                                fontSize: 16,
+                              ),
                         ),
                       ),
                     ],
@@ -74,97 +86,102 @@ class TrendingNews extends StatelessWidget {
                   const SizedBox(height: 16),
                   isLoading
                       ? Center(
-                        child: CircularProgressIndicator(
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                      )
+                          child: CircularProgressIndicator(
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        )
                       : SizedBox(
-                        height: 140,
-                        child: ListView.separated(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: articles.take(3).length,
-                          separatorBuilder: (_, __) => const SizedBox(width: 12),
-                          itemBuilder: (_, index) {
-                            final article = articles[index];
-                            return ClipRRect(
-                              borderRadius: BorderRadius.circular(12),
-                              child: Stack(
-                                children: [
-                                  CachedNetworkImage(
-                                    imageUrl: article.urlToImage ?? '',
-                                    height: 180,
-                                    width: 280,
-                                    fit: BoxFit.cover,
-                                    placeholder:
-                                        (_, __) => Container(
-                                          height: 180,
-                                          width: 280,
-                                          color: Colors.grey.shade400,
-                                        ),
-                                    errorWidget:
-                                        (_, __, ___) => Container(
-                                          height: 180,
-                                          width: 280,
-                                          color: Colors.grey.shade400,
-                                        ),
-                                  ),
-                                  Positioned(
-                                    left: 12,
-                                    bottom: 12,
-                                    right: 12,
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          article.title,
-                                          style: Theme.of(
-                                            context,
-                                          ).textTheme.titleMedium?.copyWith(
-                                            color:
-                                                Theme.of(context).colorScheme.onPrimary,
-                                          ),
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                        const SizedBox(height: 4),
-                                        Row(
-                                          children: [
-                                            if (article.urlToImage != null)
-                                              CircleAvatar(
-                                                radius: 10,
-                                                backgroundImage: NetworkImage(
-                                                  article.urlToImage!,
-                                                ),
-                                              ),
-                                            const SizedBox(width: 6),
-                                            Text(
-                                              article.sourceName,
-                                              style: Theme.of(
-                                                context,
-                                              ).textTheme.bodyMedium?.copyWith(
-                                                color:
-                                                    Theme.of(
-                                                      context,
-                                                    ).colorScheme.onPrimary,
-                                              ),
-                                            ),
-                                            const SizedBox(width: 12),
-                                            Text(
-                                              formatTimeAgo(article.publishedAt),
-                                              style:
-                                                  Theme.of(context).textTheme.bodySmall,
-                                            ),
-                                          ],
-                                        ),
-                                      ],
+                          height: 140,
+                          child: ListView.separated(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: articles.take(3).length,
+                            separatorBuilder: (_, __) =>
+                                const SizedBox(width: 12),
+                            itemBuilder: (_, index) {
+                              final article = articles[index];
+                              return ClipRRect(
+                                borderRadius: BorderRadius.circular(12),
+                                child: Stack(
+                                  children: [
+                                    CachedNetworkImage(
+                                      imageUrl: article.urlToImage ?? '',
+                                      height: 180,
+                                      width: 280,
+                                      fit: BoxFit.cover,
+                                      placeholder: (_, __) => Container(
+                                        height: 180,
+                                        width: 280,
+                                        color: Colors.grey.shade400,
+                                      ),
+                                      errorWidget: (_, __, ___) => Container(
+                                        height: 180,
+                                        width: 280,
+                                        color: Colors.grey.shade400,
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
+                                    Positioned(
+                                      left: 12,
+                                      bottom: 12,
+                                      right: 12,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            article.title,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleMedium
+                                                ?.copyWith(
+                                                  color: Theme.of(
+                                                    context,
+                                                  ).colorScheme.onPrimary,
+                                                ),
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          const SizedBox(height: 4),
+                                          Row(
+                                            children: [
+                                              if (article.urlToImage != null)
+                                                CircleAvatar(
+                                                  radius: 10,
+                                                  backgroundImage: NetworkImage(
+                                                    article.urlToImage!,
+                                                  ),
+                                                ),
+                                              const SizedBox(width: 6),
+                                              Text(
+                                                article.sourceName,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyMedium
+                                                    ?.copyWith(
+                                                      color: Theme.of(
+                                                        context,
+                                                      ).colorScheme.onPrimary,
+                                                    ),
+                                              ),
+                                              const SizedBox(width: 12),
+                                              Text(
+                                                formatTimeAgo(
+                                                  article.publishedAt,
+                                                ),
+                                                style: Theme.of(
+                                                  context,
+                                                ).textTheme.bodySmall,
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
                         ),
-                      ),
                 ],
               ),
             ),

@@ -14,6 +14,7 @@ class OnboardingScreen extends StatefulWidget {
 class _OnboardingScreenState extends State<OnboardingScreen> {
   final PageController _controller = PageController();
   int _currentPage = 0;
+  
 
   final List<OnboardingModel> onboardingData = [
     OnboardingModel(image: 'assets/images/onboarding1.png', title: 'Update for new features', desc: "You deserve the best experience possible. That's why we've added new features and services to our app. Update now and see for yourself."),
