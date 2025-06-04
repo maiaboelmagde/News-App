@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:news_app/core/constants/hive_boxes_names.dart';
 import 'package:news_app/features/home/models/news_article_model.dart';
+import 'package:news_app/features/news_details_screen/details_screen.dart';
 
 /// TODO : Task - Make it Shared Component and use it with search screen
 class NewsCard extends StatelessWidget {
@@ -25,9 +26,9 @@ class NewsCard extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       child: GestureDetector(
         onTap: () {
-      
-            // TODO: Navigate to article details screen
-      
+          Navigator.push(context, MaterialPageRoute(builder: (context){
+            return NewsDetails(article: article, isBookmarked: isBookmarked);
+          }));
         },
         child: Row(
           children: [
@@ -48,7 +49,7 @@ class NewsCard extends StatelessWidget {
                     article.title,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.titleMedium,
+                    style: Theme.of(context).textTheme.titleSmall,
                   ),
                   Row(
                     children: [

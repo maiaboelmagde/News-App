@@ -131,7 +131,7 @@ class TrendingNews extends StatelessWidget {
                                             article.title,
                                             style: Theme.of(context)
                                                 .textTheme
-                                                .titleMedium
+                                                .bodyMedium
                                                 ?.copyWith(
                                                   color: Theme.of(
                                                     context,

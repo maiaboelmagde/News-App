@@ -5,10 +5,9 @@ import 'package:news_app/features/home/repositories/base_news_api_repository.dar
 
 class NewsProvider with ChangeNotifier{
   final BaseNewsApiRepository _repository = locator<BaseNewsApiRepository>();
-
   bool _isLoadingEverything = true;
   List<NewsArticle> _newsArticles = [];
-  String? _newsErrorMessage = null;
+  String? _newsErrorMessage;
   // bool _isLoadingHeadlines = true;
   // List<NewsArticle> _topHeadlines = [];
   // String _headlinesErrorMessage = '';

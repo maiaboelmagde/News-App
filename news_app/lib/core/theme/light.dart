@@ -12,6 +12,7 @@ class AppTheme {
   static ThemeData get lightTheme {
     return ThemeData(
       useMaterial3: true,
+      fontFamily: 'Times New Roman',
       colorScheme: const ColorScheme.light(
         primary: primaryColor,
         surface: backgroundColor,
@@ -39,6 +40,11 @@ class AppTheme {
           color: Color(0xFF484A5A),
         ),
         titleMedium: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
+        ),
+        titleSmall: TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.bold,
           color: Colors.black,
@@ -53,6 +59,11 @@ class AppTheme {
           fontSize: 12,
           fontWeight: FontWeight.normal,
           color: Colors.white70,
+        ),
+        labelSmall: TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.normal,
+          color: Color(0xFF363636),
         ),
       ),
       appBarTheme: const AppBarTheme(

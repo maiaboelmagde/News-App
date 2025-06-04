@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:news_app/core/constants/hive_boxes_names.dart';
 import 'package:news_app/core/extensions/string_extension.dart';
-import 'package:news_app/core/provider/news_provider.dart';
 import 'package:news_app/core/widgets/news_card.dart';
 import 'package:news_app/features/search/search_provider.dart';
 import 'package:provider/provider.dart';
 
-/// Done : Task - Add Controller To It
 class SearchScreen extends StatelessWidget {
   final TextEditingController _searchController = TextEditingController();
+
+  SearchScreen({super.key});
 
 
   // List<NewsArticle> _articles = [];
