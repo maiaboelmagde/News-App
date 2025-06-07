@@ -4,20 +4,18 @@ import 'package:news_app/core/constants/hive_boxes_names.dart';
 import 'package:news_app/core/provider/headlines_provider.dart';
 import 'package:news_app/core/provider/news_provider.dart';
 import 'package:news_app/core/widgets/news_card.dart';
-import 'package:news_app/features/categories/categories_screen.dart';
 import 'package:news_app/features/home/models/news_category.dart';
 import 'package:news_app/features/home/widgets/category_list_widget.dart';
-import 'package:news_app/features/home/widgets/trending_news_widget.dart';
 import 'package:provider/provider.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class CategoriesScreen extends StatefulWidget {
+  const CategoriesScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<CategoriesScreen> createState() => _CategoriesScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _CategoriesScreenState extends State<CategoriesScreen> {
   NewsCategory selectedCategory = NewsCategory.general;
 
   final List<NewsCategory> categories = NewsCategory.values;
@@ -26,7 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _loadNews();
-    _loadHeadlines();
+    ();
   }
 
   Future<void> _loadNews() async {
@@ -36,56 +34,20 @@ class _HomeScreenState extends State<HomeScreen> {
     ).fetchNews(query: selectedCategory.apiQuery);
   }
 
-  Future<void> _loadHeadlines() async {
-    Provider.of<HeadlinesProvider>(
-      context,
-      listen: false,
-    ).fetchTopHeadlines(category: selectedCategory.apiQuery);
-  }
-
   @override
   Widget build(BuildContext context) {
     final newsProvider = Provider.of<NewsProvider>(context);
-    final headlinesProvider = Provider.of<HeadlinesProvider>(context);
 
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Categories',
+          style: Theme.of(context).textTheme.titleSmall,
+        ),
+        centerTitle: true,
+      ),
       body: CustomScrollView(
         slivers: [
-          SliverToBoxAdapter(
-            child: TrendingNews(
-              isLoading: headlinesProvider.isLoadingHeadlines,
-              articles: headlinesProvider.topHeadlines,
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              child: Row(
-                children: [
-                  Text('Categories',style: Theme.of(context).textTheme.titleSmall,),
-                  Spacer(),
-
-                  GestureDetector(
-                    onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => CategoriesScreen(),
-                            ),
-                          );
-                        },
-                    child: Text(
-                      'View all',
-                      style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                        decoration: TextDecoration.underline,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -100,7 +62,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   );
                   _loadNews();
-                  _loadHeadlines();
                 },
               ),
             ),

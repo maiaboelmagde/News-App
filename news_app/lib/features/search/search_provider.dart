@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:news_app/core/service_locator.dart';
 import 'package:news_app/features/home/models/news_article_model.dart';
@@ -9,18 +8,11 @@ class SearchProvider with ChangeNotifier{
 
   bool _isLoadingEverything = false;
   List<NewsArticle> _articles = [];
-  String? _newsErrorMessage = null;
-  // bool _isLoadingHeadlines = true;
-  // List<NewsArticle> _topHeadlines = [];
-  // String _headlinesErrorMessage = '';
-  
+  String? _newsErrorMessage;
 
   List<NewsArticle> get articles =>_articles;
-  // List<NewsArticle> get topHeadlines => _topHeadlines;
   bool get isLoadingEverything => _isLoadingEverything;
-  // bool get isLoadingHeadlines => _isLoadingHeadlines;
   String? get newsErrorMessage => _newsErrorMessage;
-  // String get headlinesErrorMessage => _headlinesErrorMessage;
 
 
   Future<void>fetchNews({required String query})async{
