@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:news_app/core/service_locator.dart';
@@ -29,7 +28,6 @@ class SearchProvider with ChangeNotifier{
     notifyListeners ();
     try{
       _articles = await _repository.fetchEverything(query: query);
-      log('${_articles[0].toString()}');
     }catch(e){
       _articles = [];
       _newsErrorMessage='FAILED TO Fech Articles';

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:news_app/core/constants/hive_boxes_names.dart';
-import 'package:news_app/core/extensions/string_extension.dart';
 import 'package:news_app/core/provider/headlines_provider.dart';
 import 'package:news_app/core/provider/news_provider.dart';
 import 'package:news_app/core/widgets/news_card.dart';
+import 'package:news_app/features/home/models/news_category.dart';
 import 'package:news_app/features/home/widgets/category_list_widget.dart';
 import 'package:news_app/features/home/widgets/trending_news_widget.dart';
 import 'package:provider/provider.dart';
@@ -17,74 +17,30 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  
-  //final BaseNewsApiRepository _repository = locator<BaseNewsApiRepository>();
-  //List<NewsArticle> _topHeadlines = [];
-  //List<NewsArticle> _everythingArticles = [];
-  //bool _isLoadingHeadlines = true;
-  //bool _isLoadingEverything = true;
-  String selectedCategory = 'Top News';
+  NewsCategory selectedCategory = NewsCategory.general;
 
-  final List<String> categories = [
-    'Top News',
-    'business',
-    'entertainment',
-    'general',
-    'health',
-    'science',
-    'sports',
-    'technology',
-  ];
+  final List<NewsCategory> categories = NewsCategory.values;
 
   @override
   void initState() {
     super.initState();
     _loadNews();
+    _loadHeadlines();
   }
 
-  /// Task - Make Provider For This
   Future<void> _loadNews() async {
-    Provider.of<NewsProvider>(context, listen: false).fetchNews(
-      query: selectedCategory == 'Top News' ? 'news' : selectedCategory,
-    );
-    Provider.of<HeadlinesProvider>(context, listen: false).fetchTopHeadlines(category: selectedCategory == 'Top News' ? 'general' : selectedCategory,);
-    // setState(() {
-    //   _isLoadingHeadlines = true;
-    //   _isLoadingEverything = true;
-    // });
+    Provider.of<NewsProvider>(
+      context,
+      listen: false,
+    ).fetchNews(query: selectedCategory.apiQuery);
+  }
 
-    // try {
-    //   final headlines = await _repository.fetchTopHeadlines(
-    //     category: selectedCategory == 'Top News' ? 'general' : selectedCategory,
-    //   );
-    //   setState(() {
-    //     _topHeadlines = headlines;
-    //     _isLoadingHeadlines = false;
-    //   });
-    // } catch (_) {
-    //   setState(() {
-    //     _topHeadlines = [];
-    //     _isLoadingHeadlines = false;
-    //   });
-    // }
-
-  //   try {
-  //     final everything = await _repository.fetchEverything(
-  //       query: selectedCategory == 'Top News' ? 'news' : selectedCategory,
-  //     );
-  //     setState(() {
-  //       _everythingArticles = everything;
-  //       _isLoadingEverything = false;
-  //     });
-  //   } catch (_) {
-  //     setState(() {
-  //       _everythingArticles = [];
-  //       _isLoadingEverything = false;
-  //     });
-  //   }
-   }
-
-
+  Future<void> _loadHeadlines() async {
+    Provider.of<HeadlinesProvider>(
+      context,
+      listen: false,
+    ).fetchTopHeadlines(category: selectedCategory.apiQuery);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -98,54 +54,63 @@ class _HomeScreenState extends State<HomeScreen> {
             child: TrendingNews(
               isLoading: headlinesProvider.isLoadingHeadlines,
               articles: headlinesProvider.topHeadlines,
-              formatTimeAgo: (time)=>time.timeAgo,
             ),
           ),
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               child: CategoryList(
-                categories: categories,
-                selectedCategory: selectedCategory,
+                categories: categories.map((e) => e.displayName).toList(),
+                selectedCategory: selectedCategory.displayName,
                 onCategorySelected: (category) {
-                  setState(() => selectedCategory = category);
+                  setState(
+                    () => selectedCategory = NewsCategory.values.firstWhere(
+                      (e) => e.displayName == category,
+                      orElse: () => NewsCategory.general,
+                    ),
+                  );
                   _loadNews();
+                  _loadHeadlines();
                 },
               ),
             ),
           ),
           newsProvider.isLoadingEverything
               ? SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 32),
-                  child: Center(
-                    child: CircularProgressIndicator(
-                      color: Theme.of(context).colorScheme.primary,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 32),
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
                     ),
                   ),
-                ),
-              )
+                )
               : SliverToBoxAdapter(
-                child: ValueListenableBuilder(
-                  valueListenable: Hive.box(HiveBoxesNames.bookmarks).listenable(),
-                  builder: (context, Box box, _) {
-                    return ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: newsProvider.newsArticles.length,//_everythingArticles.length,
-                      itemBuilder: (context, index) {
-                        final article = newsProvider.newsArticles[index];//_everythingArticles[index];
-                        final isBookmarked = box.containsKey(article.url);
-                        return NewsCard(
-                          article: article,
-                          isBookmarked: isBookmarked,
-                          formatTimeAgo: (time)=>time.timeAgo,
-                        );
-                      },
-                    );
-                  },
+                  child: ValueListenableBuilder(
+                    valueListenable: Hive.box(
+                      HiveBoxesNames.bookmarks,
+                    ).listenable(),
+                    builder: (context, Box box, _) {
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: newsProvider
+                            .newsArticles
+                            .length,
+                        itemBuilder: (context, index) {
+                          final article = newsProvider
+                              .newsArticles[index];
+                          final isBookmarked = box.containsKey(article.url);
+                          return NewsCard(
+                            article: article,
+                            isBookmarked: isBookmarked,
+                          );
+                        },
+                      );
+                    },
+                  ),
                 ),
-              ),
         ],
       ),
     );

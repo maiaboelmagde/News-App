@@ -2,22 +2,20 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:news_app/core/constants/hive_boxes_names.dart';
+import 'package:news_app/core/extensions/date_extension.dart';
 import 'package:news_app/features/home/models/news_article_model.dart';
 import 'package:news_app/features/news_details_screen/details_screen.dart';
 
-/// TODO : Task - Make it Shared Component and use it with search screen
 class NewsCard extends StatelessWidget {
   final NewsArticle article;
   final bool isBookmarked;
   final Function()? onBookmarkPressed;
-  final String Function(DateTime) formatTimeAgo;
 
   const NewsCard({
     super.key,
     required this.article,
     this.isBookmarked = false,
     this.onBookmarkPressed,
-    required this.formatTimeAgo,
   });
 
   @override
@@ -27,7 +25,7 @@ class NewsCard extends StatelessWidget {
       child: GestureDetector(
         onTap: () {
           Navigator.push(context, MaterialPageRoute(builder: (context){
-            return NewsDetails(article: article, isBookmarked: isBookmarked);
+            return NewsDetails(article: article);
           }));
         },
         child: Row(
@@ -72,7 +70,7 @@ class NewsCard extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                            formatTimeAgo(article.publishedAt),
+                            article.publishedAt.timeAgo,
                             style: Theme.of(context).textTheme.bodySmall,
                           ),
                           IconButton(

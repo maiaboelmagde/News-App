@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:hive/hive.dart';
 
 part 'news_article_model.g.dart';
@@ -10,7 +8,7 @@ class NewsArticle {
   final String title;
 
   @HiveField(1)
-  final String description;
+  final String? description;
 
   @HiveField(2)
   final String? urlToImage;
@@ -25,7 +23,7 @@ class NewsArticle {
   final String url;
 
   @HiveField(6)
-  final String content	;
+  final String? content	;
 
   NewsArticle({
     required this.title,
@@ -38,7 +36,6 @@ class NewsArticle {
   });
 
   factory NewsArticle.fromJson(Map<String, dynamic> json) {
-    log('$json');
     return NewsArticle(
       title: json['title'] ?? '',
       description: json['description'],

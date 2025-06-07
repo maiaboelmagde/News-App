@@ -18,7 +18,8 @@ class NewsApiRepositoryImpl implements BaseNewsApiRepository {
     final url =
         '${ApiConfig.baseUrl}${ApiConfig.topHeadlinesEndpoint}?country=us&category=$category&apiKey=${ApiConfig.apiKey}';
     final data = await _apiService.get(url);
-    log(url);
+    log('fetchTopHeadlines At NewsApiRepositoryImpl url:  ${url}');
+
     return (data['articles'] as List).map((e) => NewsArticle.fromJson(e)).toList();
   }
 
@@ -26,6 +27,8 @@ class NewsApiRepositoryImpl implements BaseNewsApiRepository {
   Future<List<NewsArticle>> fetchEverything({required String query}) async {
     final url =
         '${ApiConfig.baseUrl}${ApiConfig.everythingEndpoint}?q=$query&sortBy=publishedAt&language=en&apiKey=${ApiConfig.apiKey}';
+
+    log('fetchingNewsLink $url');
     final data = await _apiService.get(url);
     return (data['articles'] as List).map((e) => NewsArticle.fromJson(e)).toList();
   }

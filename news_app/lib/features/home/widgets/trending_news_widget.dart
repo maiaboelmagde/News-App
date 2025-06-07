@@ -1,20 +1,19 @@
-// trending_news_widget.dart
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:news_app/core/extensions/date_extension.dart';
 import 'package:news_app/core/theme/light.dart';
 import 'package:news_app/features/home/models/news_article_model.dart';
+import 'package:news_app/features/news_details_screen/details_screen.dart';
 import 'package:news_app/features/trends_screen/all_trends_screen.dart';
 
 class TrendingNews extends StatelessWidget {
   final bool isLoading;
   final List<NewsArticle> articles;
-  final String Function(DateTime) formatTimeAgo;
 
   const TrendingNews({
     super.key,
     required this.isLoading,
     required this.articles,
-    required this.formatTimeAgo,
   });
 
   @override
@@ -47,7 +46,6 @@ class TrendingNews extends StatelessWidget {
                 children: [
                   Center(
                     child: Text(
-                      /// Handle Theme Here
                       'NEWST',
                       style: Theme.of(context).textTheme.headlineLarge,
                     ),
@@ -60,8 +58,6 @@ class TrendingNews extends StatelessWidget {
                         'Trending News',
                         style: Theme.of(context).textTheme.headlineMedium,
                       ),
-
-                      /// Done : MAKE TRENDING NEWS SCREEN
                       GestureDetector(
                         onTap: () {
                           Navigator.push(
@@ -99,84 +95,90 @@ class TrendingNews extends StatelessWidget {
                                 const SizedBox(width: 12),
                             itemBuilder: (_, index) {
                               final article = articles[index];
-                              return ClipRRect(
-                                borderRadius: BorderRadius.circular(12),
-                                child: Stack(
-                                  children: [
-                                    CachedNetworkImage(
-                                      imageUrl: article.urlToImage ?? '',
-                                      height: 180,
-                                      width: 280,
-                                      fit: BoxFit.cover,
-                                      placeholder: (_, __) => Container(
+                              return GestureDetector(
+                                onTap: (){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context){
+                                    return NewsDetails(article: article);
+                                  }));
+                                },
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(12),
+                                  child: Stack(
+                                    children: [
+                                      CachedNetworkImage(
+                                        imageUrl: article.urlToImage ?? '',
                                         height: 180,
                                         width: 280,
-                                        color: Colors.grey.shade400,
+                                        fit: BoxFit.cover,
+                                        placeholder: (_, __) => Container(
+                                          height: 180,
+                                          width: 280,
+                                          color: Colors.grey.shade400,
+                                        ),
+                                        errorWidget: (_, __, ___) => Container(
+                                          height: 180,
+                                          width: 280,
+                                          color: Colors.grey.shade400,
+                                        ),
                                       ),
-                                      errorWidget: (_, __, ___) => Container(
-                                        height: 180,
-                                        width: 280,
-                                        color: Colors.grey.shade400,
-                                      ),
-                                    ),
-                                    Positioned(
-                                      left: 12,
-                                      bottom: 12,
-                                      right: 12,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            article.title,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyMedium
-                                                ?.copyWith(
-                                                  color: Theme.of(
-                                                    context,
-                                                  ).colorScheme.onPrimary,
-                                                ),
-                                            maxLines: 2,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                          const SizedBox(height: 4),
-                                          Row(
-                                            children: [
-                                              if (article.urlToImage != null)
-                                                CircleAvatar(
-                                                  radius: 10,
-                                                  backgroundImage: NetworkImage(
-                                                    article.urlToImage!,
+                                      Positioned(
+                                        left: 12,
+                                        bottom: 12,
+                                        right: 12,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              article.title,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium
+                                                  ?.copyWith(
+                                                    color: Theme.of(
+                                                      context,
+                                                    ).colorScheme.onPrimary,
                                                   ),
-                                                ),
-                                              const SizedBox(width: 6),
-                                              Text(
-                                                article.sourceName,
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyMedium
-                                                    ?.copyWith(
-                                                      color: Theme.of(
-                                                        context,
-                                                      ).colorScheme.onPrimary,
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                            const SizedBox(height: 4),
+                                            Row(
+                                              children: [
+                                                if (article.urlToImage != null)
+                                                  CircleAvatar(
+                                                    radius: 10,
+                                                    backgroundImage: NetworkImage(
+                                                      article.urlToImage!,
                                                     ),
-                                              ),
-                                              const SizedBox(width: 12),
-                                              Text(
-                                                formatTimeAgo(
-                                                  article.publishedAt,
+                                                  ),
+                                                const SizedBox(width: 6),
+                                                Text(
+                                                  article.sourceName,
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyMedium
+                                                      ?.copyWith(
+                                                        color: Theme.of(
+                                                          context,
+                                                        ).colorScheme.onPrimary,
+                                                      ),
                                                 ),
-                                                style: Theme.of(
-                                                  context,
-                                                ).textTheme.bodySmall,
-                                              ),
-                                            ],
-                                          ),
-                                        ],
+                                                const SizedBox(width: 12),
+                                                Text(
+                                                  article.publishedAt.timeAgo,
+                                
+                                                  style: Theme.of(
+                                                    context,
+                                                  ).textTheme.bodySmall,
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               );
                             },

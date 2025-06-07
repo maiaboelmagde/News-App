@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:news_app/core/constants/preference_keys.dart';
 import 'package:news_app/core/constants/routes.dart';
+import 'package:news_app/core/extensions/string_extensions.dart';
 import 'package:news_app/core/widgets/custom_text_form_field.dart';
 import 'package:news_app/services/preferences_manager.dart';
 
@@ -41,7 +42,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       });
       return;
     }
-    if (!RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(email)) {
+    if (!email.isValidEmail) {
       setState(() {
         _errorMessage = 'Please enter a valid email address.';
         _loading = false;

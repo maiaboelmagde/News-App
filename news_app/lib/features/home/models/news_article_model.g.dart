@@ -18,12 +18,12 @@ class NewsArticleAdapter extends TypeAdapter<NewsArticle> {
     };
     return NewsArticle(
       title: fields[0] as String,
-      description: fields[1] as String,
+      description: fields[1] as String?,
       urlToImage: fields[2] as String?,
       sourceName: fields[3] as String,
       publishedAt: fields[4] as DateTime,
       url: fields[5] as String,
-      content: fields[6] as String,
+      content: fields[6] as String?,
     );
   }
 
