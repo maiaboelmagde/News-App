@@ -11,41 +11,6 @@ class SearchScreen extends StatelessWidget {
   SearchScreen({super.key});
 
 
-  // List<NewsArticle> _articles = [];
-  // bool _isLoading = false;
-  // String? _errorMessage;
-
-  // Future<void> _searchNews(String query) async {
-  //   Provider.of<SearchProvider>(context, listen: false).fetchNews(query: query);
-
-  // if (query.isEmpty) {
-  //   setState(() {
-  //     _articles = [];
-  //     _errorMessage = null;
-  //   });
-  //   return;
-  // }
-
-  // setState(() {
-  //   _isLoading = true;
-  //   _errorMessage = null;
-  // });
-
-  // try {
-  //   final repository = locator<BaseNewsApiRepository>();
-  //   final articles = await repository.fetchEverything(query: query);
-  //   setState(() {
-  //     _articles = articles;
-  //     _isLoading = false;
-  //   });
-  // } catch (e) {
-  //   setState(() {
-  //     _errorMessage = 'Failed to load news: $e';
-  //     _isLoading = false;
-  //   });
-  // }
-  // }
-
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(

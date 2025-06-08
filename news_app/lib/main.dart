@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -26,7 +24,6 @@ void main() async {
   Hive.registerAdapter(NewsArticleAdapter());
 
 
-  log(HiveBoxesNames.bookmarks);
   await Hive.openBox(HiveBoxesNames.bookmarks);
   await Hive.openBox(HiveBoxesNames.settings);
 

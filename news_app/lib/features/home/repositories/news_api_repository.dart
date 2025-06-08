@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:news_app/core/datasource/remote_data/api_config.dart'; // Import the new ApiConfig
 import 'package:news_app/core/datasource/remote_data/base_api_service.dart';
 
@@ -13,12 +11,11 @@ class NewsApiRepositoryImpl implements BaseNewsApiRepository {
 
   @override
   Future<List<NewsArticle>> fetchTopHeadlines({String category = 'general'}) async {
-    /// Task - Don't Send baseUrl .. add it on the BaseApiService then send endpoint only [سبها]
+    /// TODO - Don't Send baseUrl .. add it on the BaseApiService then send endpoint only
     /// 
     final url =
         '${ApiConfig.baseUrl}${ApiConfig.topHeadlinesEndpoint}?country=us&category=$category&apiKey=${ApiConfig.apiKey}';
     final data = await _apiService.get(url);
-    log(url);
 
     return (data['articles'] as List).map((e) => NewsArticle.fromJson(e)).toList();
   }
@@ -28,7 +25,6 @@ class NewsApiRepositoryImpl implements BaseNewsApiRepository {
     final url =
         '${ApiConfig.baseUrl}${ApiConfig.everythingEndpoint}?q=$query&sortBy=publishedAt&language=en&apiKey=${ApiConfig.apiKey}';
 
-    log('fetchingNewsLink $url');
     final data = await _apiService.get(url);
     return (data['articles'] as List).map((e) => NewsArticle.fromJson(e)).toList();
   }

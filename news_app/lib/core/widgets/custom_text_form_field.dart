@@ -8,6 +8,7 @@ class CustomTextFormField extends StatelessWidget {
     required this.controller,
     this.obscureText = false,
     this.suffixIcon,
+    this.validator
   });
 
   final String title;
@@ -15,13 +16,14 @@ class CustomTextFormField extends StatelessWidget {
   final TextEditingController controller;
   final bool obscureText;
   final Widget? suffixIcon;
+  final String? Function(String?)? validator;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title, style: TextStyle(fontSize: 18)),
+        Text(title, style: Theme.of(context).textTheme.labelLarge),
         const SizedBox(height: 8),
         TextFormField(
           controller: controller,
@@ -34,6 +36,7 @@ class CustomTextFormField extends StatelessWidget {
             fillColor: Colors.white,
             suffixIcon: suffixIcon,
           ),
+          validator: validator ?? (value)=> null,
         ),
       ],
     );

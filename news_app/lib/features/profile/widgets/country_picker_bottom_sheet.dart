@@ -9,14 +9,15 @@ class CountryPickerBottomSheet extends StatefulWidget {
   const CountryPickerBottomSheet({super.key, this.selectedCode});
 
   @override
-  State<CountryPickerBottomSheet> createState() => _CountryPickerBottomSheetState();
+  State<CountryPickerBottomSheet> createState() =>
+      _CountryPickerBottomSheetState();
 }
 
 class _CountryPickerBottomSheetState extends State<CountryPickerBottomSheet> {
   final TextEditingController _searchController = TextEditingController();
   late List<Country> _filteredCountries;
   final prefs = PreferencesManager();
-  String? _selectedCountryCode ;
+  String? _selectedCountryCode;
 
   final List<Country> _countries = [
     Country('Egypt', 'EG'),
@@ -31,13 +32,12 @@ class _CountryPickerBottomSheetState extends State<CountryPickerBottomSheet> {
     Country('Brazil', 'BR'),
   ];
 
-  
-
   @override
   void initState() {
     super.initState();
     _filteredCountries = _countries;
-    _selectedCountryCode = widget.selectedCode ?? prefs.getString(PreferenceKeys.selectedCountry);
+    _selectedCountryCode =
+        widget.selectedCode ?? prefs.getString(PreferenceKeys.selectedCountry);
     _searchController.addListener(_onSearch);
   }
 
@@ -50,9 +50,8 @@ class _CountryPickerBottomSheetState extends State<CountryPickerBottomSheet> {
     });
   }
 
-  Future<void> _selectCountry(Country country) async {
-    await prefs.setString(PreferenceKeys.selectedCountry, country.code);
-    setState(() => _selectedCountryCode = country.code);
+  Future<void> _selectCountry(String countryCode) async {
+    await prefs.setString(PreferenceKeys.selectedCountry, countryCode);
   }
 
   @override
@@ -62,11 +61,11 @@ class _CountryPickerBottomSheetState extends State<CountryPickerBottomSheet> {
     return FractionallySizedBox(
       heightFactor: 0.75,
       child: Padding(
-        padding:EdgeInsets.only(
-        left: 16,
-        right: 16,
-        top: 16,
-        bottom: MediaQuery.of(context).viewInsets.bottom,
+        padding: EdgeInsets.only(
+          left: 16,
+          right: 16,
+          top: 16,
+          bottom: MediaQuery.of(context).viewInsets.bottom,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -86,23 +85,47 @@ class _CountryPickerBottomSheetState extends State<CountryPickerBottomSheet> {
               child: ListView.separated(
                 shrinkWrap: true,
                 itemCount: _filteredCountries.length,
-                separatorBuilder: (_, __) => const SizedBox(height: 8,),
+                separatorBuilder: (_, __) => const SizedBox(height: 8),
                 itemBuilder: (context, index) {
                   final country = _filteredCountries[index];
                   return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
                     child: ListTile(
-                      leading: Text(country.flag, style: const TextStyle(fontSize: 24)),
+                      leading: Text(
+                        country.flag,
+                        style: const TextStyle(fontSize: 24),
+                      ),
                       title: Text(country.name, style: theme.bodyMedium),
                       trailing: Radio<String>(
                         value: country.code,
                         groupValue: _selectedCountryCode,
-                        onChanged: (_) => _selectCountry(country),
+                        onChanged: (_) {
+                          _selectedCountryCode = country.code;
+                          setState(() {});
+                        },
                       ),
-                      onTap: () => _selectCountry(country),
                     ),
                   );
                 },
+              ),
+            ),
+
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  if (_selectedCountryCode != null) {
+                    _selectCountry(_selectedCountryCode!);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Country saved successfully!')),
+                    );
+                  }
+                  Navigator.pop(context);
+                },
+                child: Text('Save'),
               ),
             ),
           ],

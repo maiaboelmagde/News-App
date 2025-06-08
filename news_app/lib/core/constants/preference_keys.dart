@@ -7,4 +7,5 @@ class PreferenceKeys {
   static const String selectedLanguage = 'selected_language';
   static const String userName = 'user_name';
   static const String userImage = 'user_image';
+  static const String userPhone = 'user_phone';
 }

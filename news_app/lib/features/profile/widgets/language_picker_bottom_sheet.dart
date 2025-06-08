@@ -9,7 +9,8 @@ class LanguagePickerBottomSheet extends StatefulWidget {
   const LanguagePickerBottomSheet({super.key, this.selectedCode});
 
   @override
-  State<LanguagePickerBottomSheet> createState() => _LanguagePickerBottomSheetState();
+  State<LanguagePickerBottomSheet> createState() =>
+      _LanguagePickerBottomSheetState();
 }
 
 class _LanguagePickerBottomSheetState extends State<LanguagePickerBottomSheet> {
@@ -36,7 +37,8 @@ class _LanguagePickerBottomSheetState extends State<LanguagePickerBottomSheet> {
   void initState() {
     super.initState();
     _filteredLanguages = _languages;
-    _selectedLanguageCode = widget.selectedCode ?? prefs.getString(PreferenceKeys.selectedLanguage);
+    _selectedLanguageCode =
+        widget.selectedCode ?? prefs.getString(PreferenceKeys.selectedLanguage);
     _searchController.addListener(_onSearch);
   }
 
@@ -49,17 +51,13 @@ class _LanguagePickerBottomSheetState extends State<LanguagePickerBottomSheet> {
     });
   }
 
-  Future<void> _selectLanguage(Language language) async {
-    await prefs.setString(PreferenceKeys.selectedLanguage, language.code);
-    setState(() => _selectedLanguageCode = language.code);
-    
-    Navigator.pop(context, language);
+  void _selectLanguage(String languageCode) {
+    prefs.setString(PreferenceKeys.selectedLanguage, languageCode);
   }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).textTheme;
-
+    
     return FractionallySizedBox(
       heightFactor: 0.75,
       child: Padding(
@@ -86,19 +84,38 @@ class _LanguagePickerBottomSheetState extends State<LanguagePickerBottomSheet> {
               child: ListView.separated(
                 shrinkWrap: true,
                 itemCount: _filteredLanguages.length,
-                separatorBuilder: (_, __) => const SizedBox(height: 8,),
+                separatorBuilder: (_, __) => const SizedBox(height: 8),
                 itemBuilder: (context, index) {
-                  final language = _filteredLanguages[index];
+                  final curlanguage = _filteredLanguages[index];
                   return ListTile(
-                    title: Text(language.name, style: theme.bodyMedium),
+                    title: Text(curlanguage.name, style: theme.bodyMedium),
                     trailing: Radio<String>(
-                      value: language.code,
+                      value: curlanguage.code,
                       groupValue: _selectedLanguageCode,
-                      onChanged: (_) => _selectLanguage(language),
+                      onChanged: (_) {
+                        _selectedLanguageCode = curlanguage.code;
+                        setState(() { 
+                        });
+                      },
                     ),
-                    onTap: () => _selectLanguage(language),
                   );
                 },
+              ),
+            ),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  if (_selectedLanguageCode != null) {
+                    _selectLanguage(_selectedLanguageCode!);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Language saved successfully!')),
+                    );
+                  }
+              
+                  Navigator.pop(context);
+                },
+                child: Text('Save'),
               ),
             ),
           ],

@@ -166,12 +166,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         width: double.infinity,
                         height: 56,
                         child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFFD32F2F),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                          ),
                           onPressed: _loading ? null : _signUp,
                           child:
                               _loading

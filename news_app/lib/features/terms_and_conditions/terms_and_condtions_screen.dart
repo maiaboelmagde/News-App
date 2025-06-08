@@ -22,17 +22,17 @@ class TermsAndConditionsScreen extends StatelessWidget {
                   children: [
                     Text(
                       'Welcome to NewsApp!',
-                      style: theme.titleMedium, // fontSize: 20
+                      style: theme.titleMedium,
                     ),
                     const SizedBox(height: 16),
                     Text(
                       'By using this application, you agree to the following terms and conditions. Please read them carefully.',
-                      style: theme.bodyMedium, // fontSize: 14
+                      style: theme.bodyMedium,
                     ),
                     const SizedBox(height: 24),
                     Text(
                       '1. Usage of Service',
-                      style: theme.titleSmall, // fontSize: 16, bold
+                      style: theme.titleSmall,
                     ),
                     const SizedBox(height: 8),
                     Text(
