@@ -1,4 +1,3 @@
-// main.dart
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
