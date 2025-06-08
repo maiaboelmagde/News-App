@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:news_app/core/constants/preference_keys.dart';
 import 'package:news_app/core/constants/routes.dart';
-import 'package:news_app/features/profile/bottom_sheets/country_picker_bottom_sheet.dart';
-import 'package:news_app/features/profile/bottom_sheets/language_picker_bottom_sheet.dart';
+import 'package:news_app/features/profile/widgets/country_picker_bottom_sheet.dart';
+import 'package:news_app/features/profile/widgets/language_picker_bottom_sheet.dart';
 import 'package:news_app/features/profile/models/country_model.dart';
 import 'package:news_app/features/terms_and_conditions/terms_and_condtions_screen.dart';
 import 'package:news_app/services/preferences_manager.dart';
