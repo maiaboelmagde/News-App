@@ -1,8 +1,6 @@
-// core/theme.dart
 import 'package:flutter/material.dart';
 
 class AppTheme {
-  // Define color constants
   static const Color primaryColor = Color(0xFFC53030);
   static const Color backgroundColor = Color(0xFFF5F5F5);
   static const Color darkGradientColor = Colors.black;
@@ -108,6 +106,7 @@ class AppTheme {
           borderSide: BorderSide.none,
         ),
       ),
+      dividerColor: const Color.fromARGB(255, 241, 238, 238)
     );
   }
 
