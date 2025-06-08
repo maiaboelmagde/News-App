@@ -18,6 +18,7 @@ class NewsApiRepositoryImpl implements BaseNewsApiRepository {
     final url =
         '${ApiConfig.baseUrl}${ApiConfig.topHeadlinesEndpoint}?country=us&category=$category&apiKey=${ApiConfig.apiKey}';
     final data = await _apiService.get(url);
+    log(url);
 
     return (data['articles'] as List).map((e) => NewsArticle.fromJson(e)).toList();
   }

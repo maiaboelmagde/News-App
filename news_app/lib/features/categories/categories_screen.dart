@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:news_app/core/constants/hive_boxes_names.dart';
-import 'package:news_app/core/provider/headlines_provider.dart';
 import 'package:news_app/core/provider/news_provider.dart';
 import 'package:news_app/core/widgets/news_card.dart';
 import 'package:news_app/features/home/models/news_category.dart';
@@ -42,9 +41,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
       appBar: AppBar(
         title: Text(
           'Categories',
-          style: Theme.of(context).textTheme.titleSmall,
         ),
-        centerTitle: true,
       ),
       body: CustomScrollView(
         slivers: [

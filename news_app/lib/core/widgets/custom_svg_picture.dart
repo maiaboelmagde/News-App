@@ -29,8 +29,8 @@ class CustomSvgPicture extends StatelessWidget {
       width: width,
       height: height,
       colorFilter: withColorFilter
-          ? const ColorFilter.mode(Colors.black, BlendMode.srcIn)
-          : null,
+          ? const ColorFilter.mode(Colors.red, BlendMode.srcIn)
+          : const ColorFilter.mode(Colors.black, BlendMode.srcIn),
     );
   }
 }

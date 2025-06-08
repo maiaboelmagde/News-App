@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class AppTheme {
   // Define color constants
   static const Color primaryColor = Color(0xFFC53030);
-  static const Color backgroundColor = Color(0xFFFAFAFA);
+  static const Color backgroundColor = Color(0xFFF5F5F5);
   static const Color darkGradientColor = Colors.black;
   static const Color errorColor = Colors.red;
   static const Color disabledColor = Colors.grey;
@@ -67,8 +67,14 @@ class AppTheme {
         ),
       ),
       appBarTheme: const AppBarTheme(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.white,
         foregroundColor: Colors.black,
+        titleTextStyle: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
+        ),
+        centerTitle: true,
         elevation: 0,
       ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
@@ -79,7 +85,7 @@ class AppTheme {
       ),
       listTileTheme: const ListTileThemeData(
         contentPadding: EdgeInsets.zero,
-        minLeadingWidth: 16,
+        minLeadingWidth: 18,
       ),
       iconTheme: const IconThemeData(color: Colors.black),
       cardTheme: CardThemeData(

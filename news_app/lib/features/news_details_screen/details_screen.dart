@@ -26,9 +26,7 @@ class NewsDetails extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           'News Details',
-          style: Theme.of(context).textTheme.titleSmall,
         ),
-        centerTitle: true,
       ),
       body: ListView(
         padding: EdgeInsets.all(16),
