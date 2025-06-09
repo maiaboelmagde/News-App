@@ -21,6 +21,7 @@ class ProfileScreen extends StatelessWidget {
     await showModalBottomSheet<Country>(
       context: context,
       isScrollControlled: true,
+      showDragHandle: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
@@ -29,7 +30,7 @@ class ProfileScreen extends StatelessWidget {
   }
 
   void _openLanguagePicker(context) async {
-     await showModalBottomSheet(
+    await showModalBottomSheet(
       context: context,
       showDragHandle: true,
       isScrollControlled: true,
@@ -43,10 +44,18 @@ class ProfileScreen extends StatelessWidget {
   _openPersonalInfoEdit(context) async {
     await showModalBottomSheet(
       context: context,
+      showDragHandle: true,
       isScrollControlled: true,
       builder: (_) => EditPersonalInfo(),
     );
+    usernameNotifier.value = prefs.getString(PreferenceKeys.userName)?? "User Name";
   }
+
+  static final ValueNotifier<String> usernameNotifier = ValueNotifier<String>(
+    prefs.getString(PreferenceKeys.userName) ??
+        prefs.getString(PreferenceKeys.userEmail)?.extractNameFromEmail ??
+        'userName',
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -64,12 +73,12 @@ class ProfileScreen extends StatelessWidget {
                   children: [
                     ProfileImageWidget(),
                     SizedBox(height: 8),
-                    Text(
-                      prefs.getString(PreferenceKeys.userName) ??
-                          prefs
-                              .getString(PreferenceKeys.userEmail)
-                              ?.extractNameFromEmail ??
-                          'userName',
+                    ValueListenableBuilder<String>(
+                      valueListenable: usernameNotifier,
+                      builder:
+                          (BuildContext context, String value, Widget? child) {
+                            return Text(value);
+                          },
                     ),
                   ],
                 ),
@@ -81,7 +90,7 @@ class ProfileScreen extends StatelessWidget {
               leading: Icon(Icons.person_2_outlined),
               title: Text('Personal Info'),
               trailing: Icon(Icons.navigate_next),
-              onTap: ()=>_openPersonalInfoEdit(context),
+              onTap: () => _openPersonalInfoEdit(context),
             ),
             Divider(),
             ListTile(
@@ -113,12 +122,31 @@ class ProfileScreen extends StatelessWidget {
             ),
             Divider(),
             ListTile(
-              leading: Icon(Icons.logout,color: Theme.of(context).primaryColor,),
-              title: Text('Log out',style: TextStyle(color: Theme.of(context).primaryColor),),
-              trailing: Icon(Icons.navigate_next,color: Theme.of(context).primaryColor,),
+              leading: Icon(
+                Icons.logout,
+                color: Theme.of(context).primaryColor,
+              ),
+              title: Text(
+                'Log out',
+                style: TextStyle(color: Theme.of(context).primaryColor),
+              ),
+              trailing: Icon(
+                Icons.navigate_next,
+                color: Theme.of(context).primaryColor,
+              ),
               onTap: () async {
                 prefs.setBool(PreferenceKeys.isLoggedIn, false);
                 Navigator.of(context).pushReplacementNamed(AppRoutes.signIn);
+
+                // prefs.remove(PreferenceKeys.onboardingComplete);
+                // prefs.remove(PreferenceKeys.isLoggedIn);
+                // prefs.remove(PreferenceKeys.selectedCountry);
+                // prefs.remove(PreferenceKeys.selectedLanguage);
+                // //prefs.remove(PreferenceKeys.userEmail);
+                // //prefs.remove(PreferenceKeys.userPassword);
+                // prefs.remove(PreferenceKeys.userPhone);
+                // prefs.remove(PreferenceKeys.userImage);
+                // prefs.remove(PreferenceKeys.userName);
               },
             ),
           ],

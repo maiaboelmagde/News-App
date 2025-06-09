@@ -14,13 +14,32 @@ class OnboardingScreen extends StatefulWidget {
 class _OnboardingScreenState extends State<OnboardingScreen> {
   final PageController _controller = PageController();
   int _currentPage = 0;
-  
 
   final List<OnboardingModel> onboardingData = [
-    OnboardingModel(image: 'assets/images/onboarding1.png', title: 'Update for new features', desc: "You deserve the best experience possible. That's why we've added new features and services to our app. Update now and see for yourself."),
-    OnboardingModel(image: 'assets/images/onboarding2.png', title: 'Update for new features', desc: "You deserve the best experience possible. That's why we've added new features and services to our app. Update now and see for yourself."),
-    OnboardingModel(image: 'assets/images/onboarding1.png', title: 'Update for new features', desc: "You deserve the best experience possible. That's why we've added new features and services to our app. Update now and see for yourself."),
-    OnboardingModel(image: 'assets/images/onboarding3.png', title: 'Update for new features', desc: "You deserve the best experience possible. That's why we've added new features and services to our app. Update now and see for yourself."),
+    OnboardingModel(
+      image: 'assets/images/onboarding1.png',
+      title: 'Stay Informed, Effortlessly',
+      desc:
+          'Get the latest trending news and updates from around the world — all in one place, tailored just for you.',
+    ),
+    OnboardingModel(
+      image: 'assets/images/onboarding2.png',
+      title: 'News by Your Interests',
+      desc:
+          'Choose your favorite categories and explore stories that match your passions and curiosity.',
+    ),
+    OnboardingModel(
+      image: 'assets/images/onboarding3.png',
+      title: 'Bookmark & Share Instantly',
+      desc:
+          'Save your favorite articles to read later, and share them with friends in a single tap.',
+    ),
+    OnboardingModel(
+      image: 'assets/images/onboarding4.png',
+      title: 'Customize Your Experience',
+      desc:
+          'Pick your preferred language and country to personalize the news you sees.',
+    ),
   ];
 
   void _onNext() {
@@ -36,7 +55,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   Future<void> _finishOnboarding() async {
     final preferencesManager = PreferencesManager();
-    await preferencesManager.init();
 
     preferencesManager.setBool(PreferenceKeys.onboardingComplete, true);
 
@@ -90,7 +108,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         data.title,
                         textAlign: TextAlign.center,
 
-                        style:Theme.of(context).textTheme.titleLarge,
+                        style: Theme.of(context).textTheme.titleLarge,
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -116,10 +134,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 width: 14,
                 height: 14,
                 decoration: BoxDecoration(
-                  color:
-                      _currentPage == index
-                          ? const Color(0xFFC53030)
-                          : Colors.grey.shade300,
+                  color: _currentPage == index
+                      ? const Color(0xFFC53030)
+                      : Colors.grey.shade300,
                   shape: BoxShape.circle,
                 ),
               ),
@@ -133,7 +150,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               child: ElevatedButton(
                 onPressed: _onNext,
                 child: Text(
-                  _currentPage == onboardingData.length - 1 ? 'Get Started' : 'Next',
+                  _currentPage == onboardingData.length - 1
+                      ? 'Get Started'
+                      : 'Next',
                   style: const TextStyle(fontSize: 20),
                 ),
               ),

@@ -118,7 +118,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       CustomTextFormField(
                         title: 'Email',
                         controller: _emailController,
-                        hint: 'usama@usamaelgendy.com',
+                        hint: 'username@gmail.com',
                       ),
                       const SizedBox(height: 24),
                       CustomTextFormField(
